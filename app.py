@@ -6,6 +6,7 @@ import yfinance as yf
 import datetime
 
 import graphs
+import stock_symbol
 
 st.header('My Stockmarket')
 
@@ -23,12 +24,11 @@ if start_date < end_date:
 else:
     st.sidebar.error('Error: End date must fall after start date.')
 
+
 if search_stock is not None and len(str(search_stock)) > 0:
     df = yf.download(search_stock, start = start_date, end = end_date, progress = False)
-    #TO DO: get names of multiple companies
-    #company_names = (yf.Ticker(search_stock)).info['longName']
-    #st.write(company_name)
-    #st.dataframe(df['Close'])
+    full_name = stock_symbol.getCompany(search_stock)
+    st.write('Trends for Stocks belonging to '+ ",".join(full_name)  )
     select_choice = st.selectbox("Select Your Visualisation", chart_choices)
     if select_choice == 'Bollinger':
         graphs.bollinger_chart(df)
