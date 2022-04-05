@@ -11,7 +11,3 @@ def getCompany(text):
             continue
     
     return company_names
-
-
-#getCompany('GOOG')
-#getCompany('Alphabet')

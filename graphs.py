@@ -2,31 +2,43 @@ import streamlit as st
 from ta.volatility import BollingerBands
 from ta.trend import MACD
 from ta.momentum import RSIIndicator
+import pandas as pd
 
 import plotly.express as px
 
-
-def bollinger_chart(df):
+def bollinger_chart(df,search_stock):
     # Bollinger Bands
-    indicator_bb = BollingerBands(df['Close'])
-    bb = df
-    bb['bb_h'] = indicator_bb.bollinger_hband()
-    bb['bb_l'] = indicator_bb.bollinger_lband()
-    bb = bb[['Close','bb_h','bb_l']]
-    st.write('Stock Bollinger Bands')
-    st.line_chart(bb)
+    li = list(search_stock.split(" "))
+    if len(li) < 2:
+        indicator_bb = BollingerBands(df['Close'])
+        bb = df
+        bb['bb_h'] = indicator_bb.bollinger_hband()
+        bb['bb_l'] = indicator_bb.bollinger_lband()
+        bb = bb[['Close','bb_h','bb_l']]
+        st.write('Stock Bollinger Bands')
+        st.line_chart(bb)
+    else:
+        st.write("This graph only works with one Stock at a time")
 
-def moving_average_chart(df):
+def moving_average_chart(df, search_stock):
     # Moving Average Convergence Divergence
-    macd = MACD(df['Close']).macd()
-    st.write('Stock Moving Average Convergence Divergence (MACD)')
-    st.area_chart(macd)
+    li = list(search_stock.split(" "))
+    if len(li) < 2:
+        macd = MACD(df['Close']).macd()
+        st.write('Stock Moving Average Convergence Divergence (MACD)')
+        st.area_chart(macd)
+    else:
+        st.write("This graph only works with one Stock at a time")
 
-def rsi_chart(df):
+def rsi_chart(df, search_stock):
     # Resistence Strength Indicator
-    rsi = RSIIndicator(df['Close']).rsi()
-    st.write('Stock RSI')
-    st.line_chart(rsi)
+    li = list(search_stock.split(" "))
+    if len(li) < 2:
+        rsi = RSIIndicator(df['Close']).rsi()
+        st.write('Resistence Strength Indicator of the Stock')
+        st.line_chart(rsi)
+    else:
+        st.write("This graph only works with one Stock at a time")
 
 def area_chart(df):
     stock_area = px.area(df['Close'])

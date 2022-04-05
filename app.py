@@ -8,9 +8,9 @@ import datetime
 import graphs
 import stock_symbol
 
-st.header('My Stockmarket')
+st.header('Stock Market Overview')
 
-search_stock = st.sidebar.text_input("Enter the stock symbol")
+search_stock = st.sidebar.text_input("Enter the Stock Ticker symbol")
 button_clicked = st.sidebar.button("Search")
 chart_choices = ['Plotly','Bollinger', 'Moving Avg', 'RSI']
 
@@ -24,22 +24,21 @@ if start_date < end_date:
 else:
     st.sidebar.error('Error: End date must fall after start date.')
 
-
 if search_stock is not None and len(str(search_stock)) > 0:
     df = yf.download(search_stock, start = start_date, end = end_date, progress = False)
     full_name = stock_symbol.getCompany(search_stock)
     st.write('Trends for Stocks belonging to '+ ",".join(full_name)  )
     select_choice = st.selectbox("Select Your Visualisation", chart_choices)
     if select_choice == 'Bollinger':
-        graphs.bollinger_chart(df)
+        graphs.bollinger_chart(df,search_stock)
     elif select_choice == 'Moving Avg':
-        graphs.moving_average_chart(df)
+        graphs.moving_average_chart(df,search_stock)
     elif select_choice == 'RSI':
-        graphs.rsi_chart(df)
+        graphs.rsi_chart(df,search_stock)
     elif select_choice == 'Plotly':
         graphs.area_chart(df)
 
 else:
-    st.write("Please enter correct symbol")
+    st.write("Please enter correct Ticker in the Side-bar symbol")
 
 
